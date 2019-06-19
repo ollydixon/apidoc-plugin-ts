@@ -7,13 +7,13 @@
     "dist/"
   ],
   "scripts": {
-    "apidoc": "apidoc -i test/ -o test/out",
-    "copy:plugin": "rm -rf node_modules/apidoc-plugin-ts && copyfiles package.json './dist/**/*' node_modules/apidoc-plugin-ts/",
+     "apidoc": "apidoc -i test/ -o test/out",
+    "copy:plugin": "rm -rf node_modules/apidoc-plugin-ts && ln -s ../../ node_modules/apidoc-plugin-ts",
     "lint": "tslint --project tsconfig.json",
     "test": "mocha test/**/test.ts",
     "prepare": "rm -rf dist && tsc -p src/tsconfig.json",
     "prepublishOnly": "run-s prepare lint test",
-    "pretest": "rm -rf test/out && run-s prepare copy:plugin apidoc"
+    "pretest": "rm -rf test/out && run-s prepare copy:plugin"
   },
   "authors": [
     "Tom Grey",
