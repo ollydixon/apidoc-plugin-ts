@@ -1,26 +1,26 @@
-interface SquareConfig2 {
+interface SquareConfig {
   color: string
   width: number
 }
 
-interface SquareConfigsInterface2 {
-  squares: SquareConfig2[]
+interface SquareConfigsInterface {
+  squares: SquareConfig[]
 }
 
-interface SquareConfigsGeneric2 {
-  squares: Array<SquareConfig2>
+interface SquareConfigsGeneric {
+  squares: Array<SquareConfig>
 }
 
 /**
  * @api {get} /api/:id
  * @apiParam {SquareConfig} id Unique ID.
- * @apiInterface {SquareConfigsInterface2}
+ * @apiInterface {SquareConfigsInterface}
  * @apiGroup arrayAsInterface
  */
 
 /**
  * @api {get} /api/:id
  * @apiParam {SquareConfig} id Unique ID.
- * @apiInterface {SquareConfigsGeneric2}
+ * @apiInterface {SquareConfigsGeneric}
  * @apiGroup arrayGenericsTest
  */
