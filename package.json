@@ -10,7 +10,8 @@
      "apidoc": "apidoc -i test/ -o test/out",
     "copy:plugin": "rm -rf node_modules/apidoc-plugin-ts && ln -s ../../ node_modules/apidoc-plugin-ts",
     "lint": "tslint --project tsconfig.json",
-    "test": "cd test && mocha test.ts --opts='./mocha.opts'; cd ..",
+    "test": "test-no-compile",
+    "test-no-compile": "cd test && mocha test.ts --inspect-brk --opts='./mocha.opts'; cd ..",
     "prepare": "rm -rf dist && tsc -p src/tsconfig.json",
     "prepublishOnly": "run-s prepare lint test",
     "pretest": "rm -rf test/out && run-s prepare copy:plugin"

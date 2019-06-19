@@ -6,11 +6,22 @@ import * as path from 'path'
 const tests = [
   {
     name: 'test1'
+  },
+  {
+    name: 'array'
+  },
+  {
+    only: true,
+    name: 'array-generics'
+  },
+  {
+    only: true,
+    name: 'array-as-properties'
   }
 ]
 describe('Apidoc TS Plugin', () => {
   tests.forEach(function (test) {
-    it(test.name, async function () {
+    (test.only ? it.only : it)(test.name, async function () {
       const dest = `out/${test.name}`
       apidoc.createDoc({
         src: `${test.name}`, debug: true, dest })
