@@ -7,10 +7,10 @@
     "dist/"
   ],
   "scripts": {
-     "apidoc": "apidoc -i test/ -o test/out",
+    "apidoc": "apidoc -i test/ -o test/out",
     "copy:plugin": "rm -rf node_modules/apidoc-plugin-ts && ln -s ../../ node_modules/apidoc-plugin-ts",
     "lint": "tslint --project tsconfig.json",
-    "test": "test-no-compile",
+    "test": "yarn test-no-compile",
     "test-no-compile": "cd test && mocha test.ts --opts='./mocha.opts'; cd ..",
     "prepare": "rm -rf dist && tsc -p src/tsconfig.json",
     "prepublishOnly": "run-s prepare lint test",
@@ -53,7 +53,7 @@
     "tslint-config-standard": "^8.0.1"
   },
   "dependencies": {
-    "ts-morph": "1.3.3",
-    "typescript": "3.4.2"
+    "ts-morph": "2.3.0",
+    "typescript": "3.5.2"
   }
 }

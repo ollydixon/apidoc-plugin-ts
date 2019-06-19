@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import * as path from 'path'
-import Ast, { InterfaceDeclaration, PropertySignature, Symbol, SourceFile, NamespaceDeclaration } from 'ts-morph'
+import { Project as Ast, InterfaceDeclaration, PropertySignature, Symbol, SourceFile, NamespaceDeclaration } from 'ts-morph'
 
 export const APIDOC_PLUGIN_TS_CUSTOM_ELEMENT_NAME = 'apiinterface'
 
@@ -159,7 +159,7 @@ function setInterfaceElements (
       // First determine if the object is an available interface
       const typeInterface = getInterface.call(this, filename, propType)
 
-      const arrayType = isArray && prop.getType().getArrayType()
+      const arrayType = isArray && prop.getType().getArrayElementType()
       const objectProperties = arrayType
         ? arrayType.getProperties()
         : prop.getType().getProperties()
