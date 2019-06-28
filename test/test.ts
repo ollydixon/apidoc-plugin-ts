@@ -13,10 +13,17 @@ const tests = [
     name: 'array'
   },
   {
+    // only: true,
     skip: true,
-    name: 'array-as-types'
+    name: 'array-in-types'
   },
   {
+    only: false,
+    // skip: true,
+    name: 'native-types'
+  },
+  {
+    only: false,
     name: 'array-as-properties'
   }
 ]

@@ -71,6 +71,14 @@ function parseElements (elements: Apidoc.Element[], element: Apidoc.Element, blo
 
   // Get the file path to the interface
   const interfacePath = values.path ? path.resolve(path.dirname(filename), values.path.trim()) : filename
+  const parentNamespace = parseDefinitionFiles.call(this, interfacePath)
+  const { leafName } = extractNamespace.call(this, parentNamespace, namedInterface)
+
+  if (isNativeType(leafName)) {
+    setNativeElements(interfacePath, newElements, values)
+    elements.push(...newElements)
+    return
+  }
   // Does the interface exist in current file?
   const matchedInterface = getInterface.call(this, interfacePath, namedInterface)
 
@@ -114,9 +122,9 @@ function parse (content: string): ParseResult | null {
 
 /**
  *
- * @param properties
+ * @param matchedInterface
  * @param filename
- * @param new_elements
+ * @param newElements
  * @param values
  * @param inttype
  */
@@ -171,6 +179,25 @@ function setInterfaceElements (
       }
     }
   })
+}
+
+/**
+ *
+ * @param filename
+ * @param newElements
+ * @param values
+ */
+function setNativeElements (
+  filename: string,
+  newElements: Apidoc.Element[],
+  values: ParseResult
+  // inttype?: string
+) {
+
+  const propLabel = getCapitalized(values.interface)
+  // Set the element
+  newElements.push(getApiSuccessElement(`{${propLabel}} ${values.element}`))
+  return
 }
 
 /**
@@ -272,11 +299,10 @@ function extendInterface (
 ) {
   for (const extendedInterface of matchedInterface.getExtends()) {
     const extendedInterfaceName = extendedInterface.compilerNode.expression.getText()
-    const parentNamespace = matchedInterface.getParentNamespace()
-    const matchedExtendedInterface = parentNamespace
-      ? getNamespacedInterface.call(this, parentNamespace, extendedInterfaceName)
-      : getInterface.call(this, interfacePath, extendedInterfaceName)
-
+    const matchedParentNamespace = matchedInterface.getParentNamespace()
+    const parentNamespace = matchedParentNamespace ? matchedParentNamespace : parseDefinitionFiles.call(this, interfacePath)
+    const { namespace, leafName } = extractNamespace.call(this, parentNamespace, extendedInterfaceName)
+    const matchedExtendedInterface = getNamespacedInterface.call(this, namespace, leafName)
     if (!matchedExtendedInterface) {
       this.log.warn(`Could not find interface to be extended ${extendedInterfaceName}`)
       return
@@ -302,7 +328,7 @@ interface NamespacedDeclaration {
   parentNamespace: NamespacedContext
 }
 
-function getInterface (interfacePath: string, interfaceName: string): InterfaceDeclaration | undefined {
+function parseDefinitionFiles (interfacePath: string): SourceFile | undefined {
   const interfaceFile = ast.addExistingSourceFile(interfacePath)
   if (!interfaceFile) return
 
@@ -310,36 +336,46 @@ function getInterface (interfacePath: string, interfaceName: string): InterfaceD
   for (const file of ast.resolveSourceFileDependencies()) {
     trackUserAddedDefinitionFile(file)
   }
-
-  return getNamespacedInterface.call(this, interfaceFile, interfaceName)
+  return interfaceFile
 }
 
-function getNamespacedInterface (
-  rootNamespace: NamespacedContext,
-  interfaceName: string
-): InterfaceDeclaration | undefined {
-  const isNamespacedInterface = interfaceName.match(/(?:[a-zA-Z0-9_]\.)*[a-zA-Z0-9_]\./i)
+function extractNamespace (
+    rootNamespace: NamespacedContext,
+    interfaceName: string
+): {namespace: NamespaceDeclaration | undefined; leafName: string;} {
+  const isNamespaced = interfaceName.match(/(?:[a-zA-Z0-9_]\.)*[a-zA-Z0-9_]\./i)
 
-  const interfaceNameSegments = isNamespacedInterface
-    ? interfaceName.replace('[]', '').split('.')
-    : [interfaceName]
+  const nameSegments = isNamespaced
+      ? interfaceName.replace('[]', '').split('.')
+      : [interfaceName]
 
-  const namespaces = interfaceNameSegments.slice(0, -1)
-  const plainInterfaceName = interfaceNameSegments[interfaceNameSegments.length - 1]
+  const namespaces = nameSegments.slice(0, -1)
+  const leafName = nameSegments[nameSegments.length - 1]
 
   const namespace = namespaces.reduce(
-    (parent: NamespacedContext | undefined, name: string) => {
-      if (!parent) return
-      const namespace = parent.getNamespace(name)
-      if (!namespace) this.log.warn(`Could not find namespace ${name} in root namespace in file at ${rootNamespace.getSourceFile().getFilePath()}`)
-      return namespace
-    },
-    rootNamespace
-  )
-
-  if (!namespace) return
-
-  return namespace.getInterface(plainInterfaceName)
+      (parent: NamespacedContext | undefined, name: string) => {
+        if (!parent) return
+        const namespace = parent.getNamespace(name)
+        if (!namespace) this.log.warn(`Could not find namespace ${name} in root namespace in file at ${rootNamespace.getSourceFile().getFilePath()}`)
+        return namespace
+      },
+      rootNamespace
+  ) as NamespaceDeclaration | undefined
+  return {
+    namespace,
+    leafName
+  }
+}
+function getNamespacedInterface (
+  namespace: NamespaceDeclaration,
+  interfaceName: string
+): InterfaceDeclaration | undefined {
+  return namespace.getInterface(interfaceName)
+}
+function getInterface (interfacePath: string, interfaceName: string): InterfaceDeclaration | undefined {
+  const interfaceFile = parseDefinitionFiles(interfacePath)
+  const { namespace, leafName } = extractNamespace.call(this, interfaceFile, interfaceName)
+  return getNamespacedInterface.call(this, namespace, leafName)
 }
 
 function trackUserAddedDefinitionFile (file: SourceFile) {
@@ -353,6 +389,10 @@ function getCapitalized (text: string): string {
 function isNativeType (propType: string): boolean {
   const nativeTypes = ['boolean', 'Boolean', 'string', 'String', 'number', 'Number', 'Date', 'any']
   return nativeTypes.indexOf(propType) >= 0
+}
+
+function matchArrayInterface (interfaceName) {
+  return interfaceName.match(/^Array<(.*)>$/) || interfaceName.match(/^(.*)\[\]$/)
 }
 
 function isUserDefinedSymbol (symbol: ts.Symbol): boolean {

@@ -3,27 +3,16 @@ interface SquareConfig {
   width: number
 }
 
-interface SquareConfigsInterface {
-  squares: Array<SquareConfig>
-}
-
-/**
- * @api {get} /api/:id
- * @apiParam {SquareConfig} id Unique ID.
- * @apiInterface {SquareConfigsInterface}
- * @apiGroup arrayGenericsTest
- */
-
 /**
  * @api {get} /api/:id
  * @apiParam {SquareConfig} id Unique ID.
  * @apiInterface {SquareConfig[]}
- * @apiGroup arrayAsInterface
+ * @apiGroup arrayWithBracketsTest
  */
 
 /**
  * @api {get} /api/:id
  * @apiParam {SquareConfig} id Unique ID.
  * @apiInterface {Array<SquareConfig>}
- * @apiGroup arrayGenericsTest
+ * @apiGroup arrayAsGenericsTest
  */
