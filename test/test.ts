@@ -25,6 +25,10 @@ const tests = [
   {
     only: false,
     name: 'array-as-properties'
+  },
+  {
+    only: true,
+    name: 'namespaces'
   }
 ]
 describe('Apidoc TS Plugin', () => {
