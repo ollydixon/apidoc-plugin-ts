@@ -1,6 +1,6 @@
 {
   "name": "@geoblink/apidoc-plugin-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A plugin for apidoc leveraging TypeScript interfaces.",
   "main": "dist/index.js",
   "files": [
@@ -12,9 +12,9 @@
     "lint": "tslint --project tsconfig.json",
     "test": "yarn test-no-compile",
     "test-no-compile": "cd test && mocha test.ts --opts='./mocha.opts'; cd ..",
-    "prepare": "rm -rf dist && tsc -p src/tsconfig.json",
-    "prepublishOnly": "run-s prepare lint test",
-    "pretest": "rm -rf test/out && run-s prepare copy:plugin"
+    "build": "rm -rf dist && tsc -p src/tsconfig.json",
+    "prepublishOnly": "run-s build lint test",
+    "pretest": "rm -rf test/out && run-s build copy:plugin"
   },
   "authors": [
     "Tom Grey",
@@ -53,7 +53,7 @@
     "tslint-config-standard": "^8.0.1"
   },
   "dependencies": {
-    "ts-morph": "2.3.0",
+    "ts-morph": "3.1.0",
     "typescript": "3.5.2"
   }
 }
