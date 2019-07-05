@@ -13,7 +13,7 @@ const tests = [
     name: 'array'
   },
   {
-    // only: true,
+    only: true,
     skip: true,
     name: 'array-in-types'
   },
@@ -27,7 +27,7 @@ const tests = [
     name: 'array-as-properties'
   },
   {
-    only: true,
+    only: false,
     name: 'namespaces'
   }
 ]

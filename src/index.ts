@@ -72,19 +72,39 @@ function parseElements (elements: Apidoc.Element[], element: Apidoc.Element, blo
   // Get the file path to the interface
   const interfacePath = values.path ? path.resolve(path.dirname(filename), values.path.trim()) : filename
   const parentNamespace = parseDefinitionFiles.call(this, interfacePath)
-  const { leafName } = extractNamespace.call(this, parentNamespace, namedInterface)
+  const { namespace, leafName } = extractNamespace.call(this, parentNamespace, namedInterface)
 
   if (isNativeType(leafName)) {
-    setNativeElements(interfacePath, newElements, values)
-    elements.push(...newElements)
+    parseNative(elements, newElements, interfacePath, values)
     return
   }
+  const arrayMatch = matchArrayInterface(leafName)
+  if (arrayMatch) {
+    parseArray(elements, newElements, values, interfacePath, namespace, leafName, arrayMatch)
+    return
+  }
+  parseInterface(elements, newElements, values, interfacePath, namespace, leafName)
   // Does the interface exist in current file?
-  const matchedInterface = getInterface.call(this, interfacePath, namedInterface)
+}
+
+function parseNative (elements: Apidoc.Element[], newElements: Apidoc.Element[], interfacePath: string, values: ParseResult) {
+  setNativeElements(interfacePath, newElements, values)
+  elements.push(...newElements)
+
+}
+
+function parseArray (elements: Apidoc.Element[], newElements: Apidoc.Element[], values: ParseResult, interfacePath: string, namespace: NamespaceDeclaration/*, leafName: string*/, arrayMatch: Array<any>) {
+  const leafName = arrayMatch[1]
+  const matchedInterface = getNamespacedInterface(namespace, leafName)
+
+}
+
+function parseInterface (elements: Apidoc.Element[], newElements: Apidoc.Element[], values: ParseResult, interfacePath: string, namespace: NamespaceDeclaration, leafName: string) {
+  const matchedInterface = getNamespacedInterface(namespace, leafName)
 
   // If interface is not found, log error
   if (!matchedInterface) {
-    this.log.warn(`Could not find interface «${namedInterface}» in file «${interfacePath}»`)
+    this.log.warn(`Could not find interface «${values.interface}» in file «${interfacePath}»`)
     return
   }
 
@@ -97,6 +117,12 @@ function parseElements (elements: Apidoc.Element[], element: Apidoc.Element, blo
 
 interface ParseResult {
   element: string
+  interface: string
+  path: string
+}
+
+interface ArrayMatch {
+  full: string
   interface: string
   path: string
 }
@@ -392,7 +418,11 @@ function isNativeType (propType: string): boolean {
 }
 
 function matchArrayInterface (interfaceName) {
-  return interfaceName.match(/^Array<(.*)>$/) || interfaceName.match(/^(.*)\[\]$/)
+  const match = interfaceName.match(/^Array<(.*)>$/) || interfaceName.match(/^(.*)\[\]$/)
+  if (!match) {
+    return null
+  }
+  return
 }
 
 function isUserDefinedSymbol (symbol: ts.Symbol): boolean {
