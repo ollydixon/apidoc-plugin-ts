@@ -23,22 +23,22 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "squares",
-            "description": "<p><code>squares</code></p>"
+            "field": "SquareConfigs",
+            "description": "<p>SquareConfigs</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "squares.color",
-            "description": "<p><code>squares.color</code></p>"
+            "field": "SquareConfigs.color",
+            "description": "<p><code>SquareConfigs.color</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "squares.width",
-            "description": "<p><code>squares.width</code></p>"
+            "field": "SquareConfigs.width",
+            "description": "<p><code>SquareConfigs.width</code></p>"
           }
         ]
       }
@@ -73,27 +73,27 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "squares",
-            "description": "<p><code>squares</code></p>"
+            "field": "SquareConfigs",
+            "description": "<p>SquareConfigs</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "squares.color",
-            "description": "<p><code>squares.color</code></p>"
+            "field": "SquareConfigs.color",
+            "description": "<p><code>SquareConfigs.color</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "squares.width",
-            "description": "<p><code>squares.width</code></p>"
+            "field": "SquareConfigs.width",
+            "description": "<p><code>SquareConfigs.width</code></p>"
           }
         ]
       }
     },
-    "group": "arrayGenericsTest",
+    "group": "arrayWithBracketsTest",
     "version": "0.0.0",
     "filename": "array-in-types/index.ts",
     "groupTitle": "arrayWithBracketsTest",

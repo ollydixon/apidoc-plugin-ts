@@ -48,6 +48,7 @@ export function init (app: Apidoc.App) {
  * @param filename
  */
 function parseElements (elements: Apidoc.Element[], element: Apidoc.Element, block: string, filename: string) {
+
   // We only want to do things with the instance of our custom element.
   if (element.name !== APIDOC_PLUGIN_TS_CUSTOM_ELEMENT_NAME) return
 
@@ -80,10 +81,10 @@ function parseElements (elements: Apidoc.Element[], element: Apidoc.Element, blo
   }
   const arrayMatch = matchArrayInterface(leafName)
   if (arrayMatch) {
-    parseArray(elements, newElements, values, interfacePath, namespace, leafName, arrayMatch)
+    parseArray.call(this, elements, newElements, values, interfacePath, namespace, arrayMatch)
     return
   }
-  parseInterface(elements, newElements, values, interfacePath, namespace, leafName)
+  parseInterface.call(this, elements, newElements, values, interfacePath, namespace, leafName)
   // Does the interface exist in current file?
 }
 
@@ -93,9 +94,15 @@ function parseNative (elements: Apidoc.Element[], newElements: Apidoc.Element[],
 
 }
 
-function parseArray (elements: Apidoc.Element[], newElements: Apidoc.Element[], values: ParseResult, interfacePath: string, namespace: NamespaceDeclaration/*, leafName: string*/, arrayMatch: Array<any>) {
-  const leafName = arrayMatch[1]
+function parseArray (elements: Apidoc.Element[], newElements: Apidoc.Element[], values: ParseResult, interfacePath: string, namespace: NamespaceDeclaration, arrayMatch: ArrayMatch) {
+  const leafName = arrayMatch.interface
   const matchedInterface = getNamespacedInterface(namespace, leafName)
+  if (!matchedInterface) {
+    this.log.warn(`Could not find interface «${leafName}» in file «${interfacePath}»`)
+    return
+  }
+  setArrayElements.call(this, matchedInterface, interfacePath, newElements, values)
+  elements.push(...newElements)
 
 }
 
@@ -124,7 +131,6 @@ interface ParseResult {
 interface ArrayMatch {
   full: string
   interface: string
-  path: string
 }
 
 /**
@@ -146,6 +152,26 @@ function parse (content: string): ParseResult | null {
   }
 }
 
+/**
+ *
+ * @param matchedInterface
+ * @param filename
+ * @param newElements
+ * @param values
+ * @param inttype
+ */
+function setArrayElements (
+    matchedInterface: InterfaceDeclaration,
+    filename: string,
+    newElements: Apidoc.Element[],
+    values: ParseResult,
+    inttype?: string
+) {
+  debugger
+  const name = matchedInterface.getName() + 's'
+  newElements.push(getApiSuccessElement(`{Object[]} ${name} ${name}`))
+  setInterfaceElements.call(this, matchedInterface, filename, newElements, values, name)
+}
 /**
  *
  * @param matchedInterface
@@ -417,12 +443,20 @@ function isNativeType (propType: string): boolean {
   return nativeTypes.indexOf(propType) >= 0
 }
 
+/**
+ *
+ * @param interfaceName
+ * @return {ArrayMatch}
+ */
 function matchArrayInterface (interfaceName) {
   const match = interfaceName.match(/^Array<(.*)>$/) || interfaceName.match(/^(.*)\[\]$/)
   if (!match) {
     return null
   }
-  return
+  return {
+    full: interfaceName,
+    interface: match[1]
+  }
 }
 
 function isUserDefinedSymbol (symbol: ts.Symbol): boolean {

@@ -10,11 +10,9 @@ const tests = [
   },
   {
     skip: true,
-    name: 'array'
+    name: 'array-with-type-aliases'
   },
   {
-    only: true,
-    skip: true,
     name: 'array-in-types'
   },
   {
