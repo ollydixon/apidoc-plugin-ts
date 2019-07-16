@@ -23,22 +23,22 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "SquareConfigs",
-            "description": "<p>SquareConfigs</p>"
+            "field": "squareConfigs",
+            "description": "<p>squareConfigs</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "SquareConfigs.color",
-            "description": "<p><code>SquareConfigs.color</code></p>"
+            "field": "squareConfigs.color",
+            "description": "<p><code>squareConfigs.color</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "SquareConfigs.width",
-            "description": "<p><code>SquareConfigs.width</code></p>"
+            "field": "squareConfigs.width",
+            "description": "<p><code>squareConfigs.width</code></p>"
           }
         ]
       }
@@ -73,22 +73,22 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "SquareConfigs",
-            "description": "<p>SquareConfigs</p>"
+            "field": "squareConfigs",
+            "description": "<p>squareConfigs</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "SquareConfigs.color",
-            "description": "<p><code>SquareConfigs.color</code></p>"
+            "field": "squareConfigs.color",
+            "description": "<p><code>squareConfigs.color</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "SquareConfigs.width",
-            "description": "<p><code>SquareConfigs.width</code></p>"
+            "field": "squareConfigs.width",
+            "description": "<p><code>squareConfigs.width</code></p>"
           }
         ]
       }

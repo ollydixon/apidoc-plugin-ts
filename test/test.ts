@@ -17,7 +17,6 @@ const tests = [
   },
   {
     only: false,
-    // skip: true,
     name: 'native-types'
   },
   {

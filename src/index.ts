@@ -167,8 +167,7 @@ function setArrayElements (
     values: ParseResult,
     inttype?: string
 ) {
-  debugger
-  const name = matchedInterface.getName() + 's'
+  const name = values.element
   newElements.push(getApiSuccessElement(`{Object[]} ${name} ${name}`))
   setInterfaceElements.call(this, matchedInterface, filename, newElements, values, name)
 }
@@ -351,8 +350,7 @@ function extendInterface (
 ) {
   for (const extendedInterface of matchedInterface.getExtends()) {
     const extendedInterfaceName = extendedInterface.compilerNode.expression.getText()
-    const matchedParentNamespace = matchedInterface.getParentNamespace()
-    const parentNamespace = matchedParentNamespace ? matchedParentNamespace : parseDefinitionFiles.call(this, interfacePath)
+    const parentNamespace = matchedInterface.getParentNamespace() || parseDefinitionFiles.call(this, interfacePath)
     const { namespace, leafName } = extractNamespace.call(this, parentNamespace, extendedInterfaceName)
     const matchedExtendedInterface = getNamespacedInterface.call(this, namespace, leafName)
     if (!matchedExtendedInterface) {
@@ -392,32 +390,33 @@ function parseDefinitionFiles (interfacePath: string): SourceFile | undefined {
 }
 
 function extractNamespace (
-    rootNamespace: NamespacedContext,
-    interfaceName: string
-): {namespace: NamespaceDeclaration | undefined; leafName: string;} {
+  rootNamespace: NamespacedContext,
+  interfaceName: string
+): { namespace: NamespaceDeclaration | undefined; leafName: string; } {
   const isNamespaced = interfaceName.match(/(?:[a-zA-Z0-9_]\.)*[a-zA-Z0-9_]\./i)
 
   const nameSegments = isNamespaced
-      ? interfaceName.replace('[]', '').split('.')
-      : [interfaceName]
+    ? interfaceName.replace('[]', '').split('.')
+    : [interfaceName]
 
   const namespaces = nameSegments.slice(0, -1)
   const leafName = nameSegments[nameSegments.length - 1]
 
   const namespace = namespaces.reduce(
-      (parent: NamespacedContext | undefined, name: string) => {
-        if (!parent) return
-        const namespace = parent.getNamespace(name)
-        if (!namespace) this.log.warn(`Could not find namespace ${name} in root namespace in file at ${rootNamespace.getSourceFile().getFilePath()}`)
-        return namespace
-      },
-      rootNamespace
+    (parent: NamespacedContext | undefined, name: string) => {
+      if (!parent) return
+      const namespace = parent.getNamespace(name)
+      if (!namespace) this.log.warn(`Could not find namespace ${name} in root namespace in file at ${rootNamespace.getSourceFile().getFilePath()}`)
+      return namespace
+    },
+    rootNamespace
   ) as NamespaceDeclaration | undefined
   return {
     namespace,
     leafName
   }
 }
+
 function getNamespacedInterface (
   namespace: NamespaceDeclaration,
   interfaceName: string
@@ -443,12 +442,7 @@ function isNativeType (propType: string): boolean {
   return nativeTypes.indexOf(propType) >= 0
 }
 
-/**
- *
- * @param interfaceName
- * @return {ArrayMatch}
- */
-function matchArrayInterface (interfaceName) {
+function matchArrayInterface (interfaceName): ArrayMatch | null {
   const match = interfaceName.match(/^Array<(.*)>$/) || interfaceName.match(/^(.*)\[\]$/)
   if (!match) {
     return null
