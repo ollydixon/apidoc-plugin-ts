@@ -10,14 +10,22 @@ const tests = [
   },
   {
     skip: true,
-    name: 'array'
+    name: 'array-with-type-aliases'
   },
   {
-    skip: true,
-    name: 'array-as-types'
+    name: 'array-in-types'
   },
   {
+    only: false,
+    name: 'native-types'
+  },
+  {
+    only: false,
     name: 'array-as-properties'
+  },
+  {
+    only: false,
+    name: 'namespaces'
   }
 ]
 describe('Apidoc TS Plugin', () => {

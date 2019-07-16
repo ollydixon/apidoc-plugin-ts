@@ -1,0 +1,25 @@
+[
+  {
+    "type": "get",
+    "url": "/api/:id",
+    "title": "",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>id</code></p>"
+          }
+        ]
+      }
+    },
+    "group": "Interface_inside_namespace",
+    "version": "0.0.0",
+    "filename": "namespaces/index.ts",
+    "groupTitle": "Interface_inside_namespace",
+    "name": "GetApiId"
+  }
+]

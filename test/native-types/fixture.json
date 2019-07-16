@@ -1,0 +1,38 @@
+[
+  {
+    "type": "get",
+    "url": "/api/:id",
+    "title": "",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "SquareConfig",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "area",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "group": "arrayWithBracketsTest",
+    "version": "0.0.0",
+    "filename": "native-types/index.ts",
+    "groupTitle": "arrayWithBracketsTest",
+    "name": "GetApiId"
+  }
+]
