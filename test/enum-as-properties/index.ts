@@ -16,7 +16,6 @@ interface EnumInterface {
   color: Color
 }
 
-
 /**
  * @api {get} /api/:id
  * @apiParam {SquareEnumConfig} id Unique ID.
