@@ -202,13 +202,17 @@ function setInterfaceElements (
     const propType = prop.getType().getText()
 
     // Determine if the type is an object
-    const propTypeIsObject = !isNativeType(propType)
+    let propTypeIsObject = !isNativeType(propType)
 
     // If type is an object change label
     const isArray = propTypeIsObject && propType.includes('[]')
+    const isEnum = prop.getType().isEnum()
+    if (isEnum) {
+      propTypeIsObject = false
+    }
     const propLabel = propTypeIsObject
       ? `Object${isArray ? '[]' : ''}`
-      : getCapitalized(propType)
+      : (isEnum ? 'Enum' : getCapitalized(propType))
 
     // Set the element
     newElements.push(getApiSuccessElement(`{${propLabel}} ${typeDef} ${description}`))
@@ -281,6 +285,12 @@ function setObjectElements<NodeType extends ts.Node = ts.Node> (
     // Nothing to do if prop is of native type
     if (isNativeType(propType)) {
       newElements.push(getApiSuccessElement(`{${getCapitalized(propType)}} ${typeDefLabel} ${desc}`))
+      return
+    }
+
+    const isEnum = valueDeclaration.getType().isEnum()
+    if (isEnum) {
+      newElements.push(getApiSuccessElement(`{Enum} ${typeDefLabel} ${desc}`))
       return
     }
 

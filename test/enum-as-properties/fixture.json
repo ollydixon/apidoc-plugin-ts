@@ -1,0 +1,88 @@
+[
+  {
+    "type": "get",
+    "url": "/api/:id",
+    "title": "",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "SquareEnumConfig",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "squares",
+            "description": "<p><code>squares</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Enum",
+            "optional": false,
+            "field": "squares.color",
+            "description": "<p><code>squares.color</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "squares.width",
+            "description": "<p><code>squares.width</code></p>"
+          }
+        ]
+      }
+    },
+    "group": "enumAsProperties",
+    "version": "0.0.0",
+    "filename": "enum-as-properties/index.ts",
+    "groupTitle": "enumAsProperties",
+    "name": "GetApiId"
+  },
+  {
+    "filename": "enum-as-properties/index.ts",
+    "group": "enumAsProperties",
+    "groupTitle": "enumAsProperties",
+    "name": "GetApiId",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "description": "<p>Unique ID.</p>",
+            "field": "id",
+            "group": "Parameter",
+            "optional": false,
+            "type": "SquareEnumConfig"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "description": "<p><code>color</code></p>",
+            "field": "color",
+            "group": "Success 200",
+            "optional": false,
+            "type": "Enum"
+          }
+        ]
+      }
+    },
+    "title": "",
+    "type": "get",
+    "url": "/api/:id",
+    "version": "0.0.0"
+  }
+]

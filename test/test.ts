@@ -26,6 +26,10 @@ const tests = [
   {
     only: false,
     name: 'namespaces'
+  },
+  {
+    only: false,
+    name: 'enum-as-properties'
   }
 ]
 describe('Apidoc TS Plugin', () => {
