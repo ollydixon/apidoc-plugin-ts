@@ -133,6 +133,13 @@ interface ArrayMatch {
   interface: string
 }
 
+enum PropType {
+  Enum = 'Enum',
+  Array = 'Array',
+  Object = 'Object',
+  Native = 'Native'
+}
+
 /**
  * Parse element content
  * @param content
@@ -199,30 +206,18 @@ function setInterfaceElements (
       : `\`${typeDef}\``
 
     // Set property type as a string
-    const propType = prop.getType().getText()
-
-    // Determine if the type is an object
-    let propTypeIsObject = !isNativeType(propType)
-
-    // If type is an object change label
-    const isArray = propTypeIsObject && propType.includes('[]')
-    const isEnum = prop.getType().isEnum()
-    if (isEnum) {
-      propTypeIsObject = false
-    }
-    const propLabel = propTypeIsObject
-      ? `Object${isArray ? '[]' : ''}`
-      : (isEnum ? 'Enum' : getCapitalized(propType))
-
+    const propTypeName = prop.getType().getText()
+    const typeEnum = getPropTypeEnum(prop)
+    const propLabel = getPropLabel(typeEnum, propTypeName)
     // Set the element
     newElements.push(getApiSuccessElement(`{${propLabel}} ${typeDef} ${description}`))
 
     // If property is an object or interface then we need to also display the objects properties
-    if (propTypeIsObject) {
+    if ([PropType.Object, PropType.Array].includes(typeEnum)) {
       // First determine if the object is an available interface
-      const typeInterface = getInterface.call(this, filename, propType)
+      const typeInterface = getInterface.call(this, filename, propTypeName)
 
-      const arrayType = isArray && prop.getType().getArrayElementType()
+      const arrayType = typeEnum === PropType.Array && prop.getType().getArrayElementType()
       const objectProperties = arrayType
         ? arrayType.getProperties()
         : prop.getType().getProperties()
@@ -450,6 +445,27 @@ function getCapitalized (text: string): string {
 function isNativeType (propType: string): boolean {
   const nativeTypes = ['boolean', 'Boolean', 'string', 'String', 'number', 'Number', 'Date', 'any']
   return nativeTypes.indexOf(propType) >= 0
+}
+
+function getPropTypeEnum (prop: PropertySignature): PropType {
+  const propType = prop.getType().getText()
+
+  const propTypeIsEnum = prop.getType().isEnum()
+  const propTypeIsObject = !propTypeIsEnum && !isNativeType(propType)
+  const propTypeIsArray = propTypeIsObject && propType.includes('[]')
+
+  if (propTypeIsArray) return PropType.Array
+  if (propTypeIsObject) return PropType.Object
+  if (propTypeIsEnum) return PropType.Enum
+  return PropType.Native
+}
+
+function getPropLabel (typeEnum: PropType, propTypeName: string): string {
+  if (typeEnum === PropType.Array) return 'Object[]'
+  if (typeEnum === PropType.Object) return 'Object'
+  if (typeEnum === PropType.Enum) return 'Enum'
+
+  return getCapitalized(propTypeName)
 }
 
 function matchArrayInterface (interfaceName): ArrayMatch | null {
