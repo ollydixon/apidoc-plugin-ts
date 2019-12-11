@@ -19,8 +19,13 @@ jobs:
     - name: Publish new version
       run: >-
        PACKAGE_NAME=$(cat package.json | jq -r '.name') &&
+       echo "Package name is $PACKAGE_NAME" &&
        PACKAGE_VERSION=$(cat package.json | jq -r '.version') &&
-       IS_PUBLISHED=$(yarn info $PACKAGE_NAME --json | jq "[.data.versions[]|select(. == \"$PACKAGE_VERSION\")]|length") &&
-       [ "$IS_PUBLISHED" = "0" ] && yarn install --frozen-lockfile && npm publish
+       echo "Package version is $PACKAGE_VERSION" &&
+       IS_PUBLISHED=$(yarn info "$PACKAGE_NAME" --json | jq -r "[.data.versions[]|select(. == \"$PACKAGE_VERSION\")]|length") &&
+       echo "IS_PUBLISHED = $IS_PUBLISHED" &&
+       [ "$IS_PUBLISHED" = "0" ] &&
+       yarn install --frozen-lockfile &&
+       npm publish
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}  
