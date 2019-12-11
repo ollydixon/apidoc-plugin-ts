@@ -24,8 +24,6 @@ jobs:
        echo "Package version is $PACKAGE_VERSION" &&
        IS_PUBLISHED=$(yarn info "$PACKAGE_NAME" --json | jq -r "[.data.versions[]|select(. == \"$PACKAGE_VERSION\")]|length") &&
        echo "IS_PUBLISHED = $IS_PUBLISHED" &&
-       [ "$IS_PUBLISHED" = "0" ] &&
-       yarn install --frozen-lockfile &&
-       npm publish
+       if [ "$IS_PUBLISHED" = "0" ]; then yarn install --frozen-lockfile && npm publish; else echo "Version is already published!"; fi
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}  
