@@ -1,6 +1,6 @@
 {
   "name": "@polydelic/apidoc-plugin-ts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A plugin for apidoc leveraging TypeScript interfaces and spitting out json.",
   "main": "dist/index.js",
   "files": [
@@ -23,11 +23,11 @@
     "node": ">=8"
   },
   "bugs": {
-    "url": "https://github.com/polydelic/apidoc-plugin-ts/issues"
+    "url": "https://github.com/ollydixon/apidoc-plugin-ts"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/geoblink/apidoc-plugin-ts.git"
+    "url": "https://github.com/ollydixon/apidoc-plugin-ts.git"
   },
   "keywords": [
     "apidoc",
