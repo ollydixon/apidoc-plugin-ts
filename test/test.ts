@@ -25,6 +25,10 @@ const tests = [
   },
   {
     only: false,
+    name: 'interface-as-json'
+  },
+  {
+    only: false,
     name: 'namespaces'
   },
   {

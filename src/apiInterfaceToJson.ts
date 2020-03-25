@@ -59,7 +59,6 @@ export function parseElementsApiInterfaceToJson(elements: Apidoc.Element[], elem
 function parseNative(elements: Apidoc.Element[], newElements: Apidoc.Element[], interfacePath: string, values: ParseResult) {
     setNativeElements(interfacePath, newElements, values)
     elements.push(...newElements)
-
 }
 
 function parseArray(elements: Apidoc.Element[], newElements: Apidoc.Element[], values: ParseResult, interfacePath: string, namespace: NamespaceDeclaration, arrayMatch: ArrayMatch) {
@@ -71,7 +70,6 @@ function parseArray(elements: Apidoc.Element[], newElements: Apidoc.Element[], v
     }
     setArrayElements.call(this, matchedInterface, interfacePath, newElements, values)
     elements.push(...newElements)
-
 }
 
 function parseInterface(elements: Apidoc.Element[], newElements: Apidoc.Element[], values: ParseResult, interfacePath: string, namespace: NamespaceDeclaration, leafName: string) {
