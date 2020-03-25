@@ -6,11 +6,11 @@ Supports extended and nested interfaces.
 ## Getting started
 
 ```javascript
-npm install --save-dev apidoc @olly/apidoc-plugin-ts
+npm install --save-dev apidoc @polydelic/apidoc-plugin-ts
 ```
 
 ```javascript
-yarn add -D apidoc @olly/apidoc-plugin-ts
+yarn add -D apidoc @polydelic/apidoc-plugin-ts
 ```
 
 A custom api-doc param `@apiInterface` is exposed:

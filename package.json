@@ -1,7 +1,7 @@
 {
-  "name": "@ollydixon/apidoc-plugin-ts",
+  "name": "@polydelic/apidoc-plugin-ts",
   "version": "1.0.3",
-  "description": "A plugin for apidoc leveraging TypeScript interfaces.",
+  "description": "A plugin for apidoc leveraging TypeScript interfaces and spitting out json.",
   "main": "dist/index.js",
   "files": [
     "dist/"
@@ -9,15 +9,10 @@
   "scripts": {
     "apidoc": "apidoc -i test/ -o test/out",
     "copy:plugin": "rm -rf node_modules/apidoc-plugin-ts && ln -s ../../ node_modules/apidoc-plugin-ts",
-    "lint": "tslint --project tsconfig.json",
     "test": "yarn test-no-compile",
     "test-no-compile": "cd test && mocha test.ts --opts='./mocha.opts'; cd ..",
     "build": "rm -rf dist && tsc -p src/tsconfig.json",
-    "prepublishOnly": "run-s build lint test",
     "pretest": "rm -rf test/out && run-s build copy:plugin"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "authors": [
     "Oliver Dixon",
@@ -25,14 +20,14 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "bugs": {
-    "url": "https://github.com/ollydixon/apidoc-plugin-ts/issues"
+    "url": "https://github.com/polydelic/apidoc-plugin-ts/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ollydixon/apidoc-plugin-ts.git"
+    "url": "https://github.com/geoblink/apidoc-plugin-ts.git"
   },
   "keywords": [
     "apidoc",
@@ -51,9 +46,7 @@
     "copyfiles": "^2.1.0",
     "mocha": "^6.1.4",
     "npm-run-all": "^4.1.5",
-    "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
-    "tslint-config-standard": "^8.0.1"
+    "ts-node": "^8.3.0"
   },
   "dependencies": {
     "ts-morph": "3.1.0",
