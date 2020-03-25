@@ -16,9 +16,12 @@
     "prepublishOnly": "run-s build lint test",
     "pretest": "rm -rf test/out && run-s build copy:plugin"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "authors": [
-    "Tom Grey",
-    "Geoblink"
+    "Oliver Dixon",
+    "Polydelic"
   ],
   "license": "MIT",
   "engines": {
